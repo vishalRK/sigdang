@@ -1,0 +1,70 @@
+{
+  "name": "restaurant-backend",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "apps/restaurant-backend/src",
+  "projectType": "application",
+  "targets": {
+    "build": {
+      "executor": "@nx/esbuild:esbuild",
+      "outputs": ["{options.outputPath}"],
+      "defaultConfiguration": "production",
+      "options": {
+        "platform": "node",
+        "outputPath": "dist/apps/restaurant-backend",
+        "format": ["cjs"],
+        "bundle": false,
+        "main": "apps/restaurant-backend/src/main.ts",
+        "tsConfig": "apps/restaurant-backend/tsconfig.app.json",
+        "assets": ["apps/restaurant-backend/src/assets"],
+        "generatePackageJson": true,
+        "esbuildOptions": {
+          "sourcemap": true,
+          "outExtension": {
+            ".js": ".js"
+          }
+        }
+      },
+      "configurations": {
+        "development": {},
+        "production": {
+          "esbuildOptions": {
+            "sourcemap": false,
+            "outExtension": {
+              ".js": ".js"
+            }
+          }
+        }
+      }
+    },
+    "serve": {
+      "executor": "@nx/js:node",
+      "defaultConfiguration": "development",
+      "options": {
+        "buildTarget": "restaurant-backend:build"
+      },
+      "configurations": {
+        "development": {
+          "buildTarget": "restaurant-backend:build:development"
+        },
+        "production": {
+          "buildTarget": "restaurant-backend:build:production"
+        }
+      }
+    },
+    "lint": {
+      "executor": "@nx/eslint:lint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["apps/restaurant-backend/**/*.ts"]
+      }
+    },
+    "test": {
+      "executor": "@nx/jest:jest",
+      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
+      "options": {
+        "jestConfig": "apps/restaurant-backend/jest.config.ts"
+      }
+    }
+  },
+  "tags": []
+}
