@@ -1,8 +1,7 @@
 "use client";
-import React, { use, useState } from "react";
-import Link from 'next/link'
-// import { useNavigate } from 'react-router';
-const Login = () => {
+import React, {  useState } from "react";
+
+const Register = () => {
   const [user, setUser] = useState({
     username: "",
     password: "",
@@ -11,8 +10,6 @@ const Login = () => {
   const [isValidUserName, setIsUserNameValid] = useState(false);
   const [isValidPassword, setIsPasswordValid] = useState(false);
   const [isValidEmail, setIsEmailValid] = useState(false);
-  
-
   const handleChange = (e: any) => {
     // handle changes in form fields
     setUser({ ...user, [e.target.name]: e.target.value });
@@ -63,10 +60,10 @@ const Login = () => {
   };
 
   return (
- 
+   
         <div className="bg-white w-[100%] large:h-[100vh] small:h-[50vh] medium:h-[50vh] grid grid-cols-1">
           <h1 className="h-[20%] large:mt-60 text-[5vw] text-center font-[600]">
-            Login
+            Register
           </h1>
           <form
             onSubmit={onSubmit}
@@ -131,8 +128,8 @@ const Login = () => {
             </div>
           </form>
         </div>
-    
+     
   );
 };
 
-export default Login;
+export default Register;
