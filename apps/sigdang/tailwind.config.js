@@ -12,6 +12,15 @@ module.exports = {
   ],
   theme: {
     extend: {
+      animation: {
+        wiggle: 'wiggle 2s ease-in-out',
+      },
+      keyframes: {
+        wiggle: {
+          '0%': { transform: 'translateY(-20px)' ,opacity:0},
+          '100%': { transform: 'translateY(5px)',opacity:1 },
+        },
+      },
       screens: {
         small: { raw: '(max-width: 540px)' },
         medium: { raw: '(min-width: 520px)' },

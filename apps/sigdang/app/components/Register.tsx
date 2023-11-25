@@ -10,12 +10,12 @@ const Register = () => {
   const [isValidUserName, setIsUserNameValid] = useState(false);
   const [isValidPassword, setIsPasswordValid] = useState(false);
   const [isValidEmail, setIsEmailValid] = useState(false);
-  const handleChange = (e: any) => {
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     // handle changes in form fields
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const onSubmit = (e: any) => {
+  const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const username = validateUsername(user.username);
     const password = validatePassword(user.password);
@@ -35,7 +35,7 @@ const Register = () => {
         setIsPasswordValid(true);
     }
   };
-  const validateUsername = (username: any) => {
+  const validateUsername = (username: string) => {
     // Check if the username has at least 5 characters
     const hasMinLength = username.length >= 5;
 
@@ -48,7 +48,7 @@ const Register = () => {
     // Combine all validation criteria
     return hasMinLength && !hasSpecialCharacter && hasUppercase;
   };
-  const validatePassword = (password: any) => {
+  const validatePassword = (password: string) => {
     // Check if the username has at least 5 characters
     const hasMinLength = password.length  >=  8;
 
@@ -66,7 +66,7 @@ const Register = () => {
             Register
           </h1>
           <form
-            onSubmit={onSubmit}
+            onSubmit={(e) => onSubmit(e)}
             className="col-span-3 justify-between h-[50%] medium:h-[80%] small:h-[80%] mt-2 large:mb-64 medium:mb-40 small:mb-40 p-4"
           >
             <div className="flex flex-col h-[30%]">

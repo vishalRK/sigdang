@@ -27,11 +27,10 @@ return res.status(201).json("user register successfully");
 //Login section
 const lgoinUser = async(req,res) => {
     const {email,password} = req.body;
-
     const user = await User.findOne({email:email});
 
     if(!user){
-        return res.redirect('/login');
+        return res.status(401).json("user not Found");
     }
     const isPassword = await bcrypt.compare(password, user.password);
     if(isPassword)
