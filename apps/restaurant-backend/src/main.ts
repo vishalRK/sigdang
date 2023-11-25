@@ -1,9 +1,15 @@
 import express from 'express';
 import mongoose from 'mongoose';
-// import bodyparser from 'body-parser';
+import cors from 'cors';
 import userRouter from './routes/auth/user.route';
 const app = express();
 
+app.use(
+    cors({
+      origin: '*',
+      credentials: true,
+    })
+  );
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
