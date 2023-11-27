@@ -35,7 +35,7 @@ const Navbar = () => {
           <h1>Logo</h1>
         </div>
         <div
-          className={`w-[60%] lg:h-[100%]  ${isToggle?"small:animate-menuopen":isClose?"small:animate-menuclose  small:left-[-300px]":"small:hidden"} medium:w-[70%] small:absolute small:top-[50px]   small:bg-white flex small:flex small:flex-col  medium:justify-evenly`}
+          className={`w-[60%] lg:h-[100%] small:z-10   ${isToggle?"small:animate-menuopen":isClose?"small:animate-menuclose  small:left-[-300px]":"small:hidden"} medium:w-[70%] small:absolute small:top-[50px]   small:bg-white flex small:flex small:flex-col  medium:justify-evenly`}
           
           >
           <Link
