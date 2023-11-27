@@ -26,7 +26,6 @@ const userSchema = new Schema({
           country: { type: String },
           city: { type: String },
           state: { type: String },
-          email:{ type: String },
           contact:{ type: String },
         },
       ],

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 
 const Navbar = () => {
   const [isToggle, setIsToogle] = useState(false);
+  const [isClose, setIsClose] = useState(false);
   const [isAboutOpen, setAboutOpent] = useState(false);
   const [isProfileOpen, setProfileOpen] = useState(false);
   return (
@@ -17,7 +18,7 @@ const Navbar = () => {
               className="transition-top ease duration-300 delay-300"
               width={50}
               height={50}
-              onClick={() => setIsToogle(!isToggle)}
+              onClick={() => isToggle?setIsClose(false):setIsToogle(true)}
             />
           ) : (
             <img
@@ -26,7 +27,7 @@ const Navbar = () => {
               width={50}
               height={50}
               className="transition-transform ease duration-700 hover:transform scale-110"
-              onClick={() => setIsToogle(!isToggle)}
+              onClick={() => isClose?setIsToogle(false):setIsClose(true)}
             />
           )}
         </div>
@@ -34,13 +35,12 @@ const Navbar = () => {
           <h1>Logo</h1>
         </div>
         <div
-          className={`w-[60%] h-[100%] medium:w-[70%] small:absolute small:top-[50px] small:left-0  small:bg-white flex small:flex small:flex-col  medium:justify-evenly ${
-            isToggle ? "small:block" : "small:hidden "
-          }`}
-        >
+          className={`w-[60%] lg:h-[100%] small:z-10   ${isToggle?"small:animate-menuopen":isClose?"small:animate-menuclose  small:left-[-300px]":"small:hidden"} medium:w-[70%] small:absolute small:top-[50px]   small:bg-white flex small:flex small:flex-col  medium:justify-evenly`}
+          
+          >
           <Link
             href="/"
-            className="pt-3 small:pl-1 small:pb-4 small:text-start small:text-[30px] "
+            className="pt-3 small:pl-1  small:pb-4 small:text-start small:text-[30px] "
           >
             Home
           </Link>

@@ -12,6 +12,7 @@ const Login = () => {
   const [isValidPassword, setIsPasswordValid] = useState(false);
   const [isValidEmail, setIsEmailValid] = useState(false);
   const [isOpen, setClosePopup] = useState(false);
+  const [isPopupMessage, setIsPopupMessage] = useState("");
 
   const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     // handle changes in form fields
@@ -43,16 +44,29 @@ const Login = () => {
         password: user.password,
       }),
     }).then((response) => {
-        console.log(response.status);
-        
-        if(!response.ok)
-        {
+      
+      if(!response.ok)
+      {
+          
           setClosePopup(true);
+          return response.json();
         }
+        setClosePopup(true);
         return response.json();
       })
       .then((data) => {
-        console.log(data);
+        console.log(data.message);
+        if(data.message)
+        {
+          setIsPopupMessage(data.message);
+          setTimeout(() =>{
+            setClosePopup(false);
+          },3000);
+          
+        }
+        
+
+       
       });
     }
   };
@@ -67,7 +81,9 @@ const Login = () => {
 
   return (
     <div className="bg-white w-[100%] large:h-[100vh] small:h-[50vh] medium:h-[50vh] grid grid-cols-1">
-       <div className={`absolute small:top-7 small:left-28 translate-y-[15px] ${isOpen?"":"hidden"} w-40 h-10 animate-wiggle flex justify-center border-b-4 border-b-orange-300 rounded-md bg-white`} onClick={() => setClosePopup(false)}><ErrorPupup  errorss="this is error"/></div>
+       <div className={`absolute small:top-7 flex flex-col small:left-28  ${isOpen?"animate-wiggle":"small:hidden medium:hidden"} w-40 h-10  flex justify-center  rounded-md bg-white`} onClick={() => setClosePopup(false)}><ErrorPupup  errorss={isPopupMessage}/>
+       <div className="w-[100%] h-1 mt-1 bg-red-800"></div>
+       </div>
       <h1 className="h-[20%] large:mt-60 text-[5vw] text-center font-[600]">
         Login
       </h1>
