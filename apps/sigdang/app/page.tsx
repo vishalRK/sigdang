@@ -1,3 +1,5 @@
+import Menu from './components/Menu';
+import Slider from './components/Slider';
 import styles from './page.module.css';
 
 export default async function Index() {
@@ -7,6 +9,9 @@ export default async function Index() {
    * Note: The corresponding styles are in the ./index.css file.
    */
   return (
-    <div>This is Home Page</div>
-    );
+    <div className="h-[60vh]">
+      <Slider />
+      <Menu />
+    </div>
+  );
 }

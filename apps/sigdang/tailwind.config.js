@@ -14,6 +14,8 @@ module.exports = {
     extend: {
       animation: {
         wiggle: 'wiggle 2s ease-in-out',
+        left: 'left 2s ease-in-out',
+        right: 'right 2s ease-in-out',
         menuopen:'menu_open 5s ease-in-out alternate',
         menuclose:'menu_close 5s ease-in-out reverse',
       },
@@ -23,6 +25,16 @@ module.exports = {
           '0%': { transform: 'translateY(-5px)' ,opacity:0},
           '100%': { transform: 'translateY(30px)',opacity:1 },
           '0%': { transform: 'translateY(-180px)',opacity:0 },
+          
+        },
+        left: {
+          '0%': { transform: 'translateX(500px)' ,opacity:0},
+          '100%': { transform: 'translateX(0px)',opacity:1 },
+          
+        },
+        right: {
+          '0%': { transform: 'translateX(-500px)' ,opacity:0},
+          '100%': { transform: 'translateX(0px)',opacity:1 },
           
         },
         menu_open: {
