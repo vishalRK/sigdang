@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import React, { useState } from "react";
+import users from '../utils/User';
 
 const Navbar = () => {
   const [isToggle, setIsToogle] = useState(false);
@@ -71,7 +72,7 @@ const Navbar = () => {
         <div className="w-[10%] small:w-[20%]" onMouseEnter={() => setProfileOpen(true)} onMouseLeave={() => setProfileOpen(false)}>
           <img src="/icons/avtar.svg" alt="" width={50} height={50} />
           <ol className={`${isProfileOpen?"medium:absolute small:absolute medium:h-[10%] medium:w-[20%] small:w-[30%] small:right-0  medium:left-[75%] large:left-[78%] text-[22px] medium:top-12  small:bg-[#ef4444] transform scale-75 group-hover:scale-100 transition duration-150 ease-in-out origin-top":"hidden"}`}>
-              <li className="text-center  medium:bg-[#ef4444] small:bg-[#ef4444]"><Link href={"/Login"}>Login</Link></li>
+              <li className="text-center  medium:bg-[#ef4444] small:bg-[#ef4444]" onClick={() => users.email?localStorage.clear():""}><h2>{users.email?"Logout":"Login"}</h2></li>
               <li className="text-center  medium:bg-[#ef4444] small:bg-[#ef4444]"><Link href={"/Login/Profile"}>Profile</Link></li>
               <li className="text-center  medium:bg-[#ef4444] small:bg-[#ef4444]"><Link href={"/Login/Cart"}>Cart</Link></li>
               <li className="text-center  medium:bg-[#ef4444] small:bg-[#ef4444]"><Link href={"/Login/Order"}>Orders</Link></li>

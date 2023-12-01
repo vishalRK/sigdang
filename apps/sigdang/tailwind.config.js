@@ -16,37 +16,42 @@ module.exports = {
         wiggle: 'wiggle 2s ease-in-out',
         left: 'left 2s ease-in-out',
         right: 'right 2s ease-in-out',
-        menuopen:'menu_open 5s ease-in-out alternate',
-        menuclose:'menu_close 5s ease-in-out reverse',
+        menuopen: 'menu_open 5s ease-in-out alternate',
+        menuclose: 'menu_close 5s ease-in-out reverse',
       },
-      
+
+      fontFamily: {
+        lobster: ['Lobster', 'sans-serif'],
+      },
+
       keyframes: {
         wiggle: {
-          '0%': { transform: 'translateY(-5px)' ,opacity:0},
-          '100%': { transform: 'translateY(30px)',opacity:1 },
-          '0%': { transform: 'translateY(-180px)',opacity:0 },
-          
+          '0%': { transform: 'translateY(-5px)', opacity: 0 },
+          '100%': { transform: 'translateY(30px)', opacity: 1 },
+          '0%': { transform: 'translateY(-180px)', opacity: 0 },
         },
         left: {
-          '0%': { transform: 'translateX(500px)' ,opacity:0},
-          '100%': { transform: 'translateX(0px)',opacity:1 },
-          
+          '0%': { transform: 'translateX(500px)', opacity: 0 },
+          '100%': { transform: 'translateX(0px)', opacity: 1 },
         },
         right: {
-          '0%': { transform: 'translateX(-500px)' ,opacity:0},
-          '100%': { transform: 'translateX(0px)',opacity:1 },
-          
+          '0%': { transform: 'translateX(-500px)', opacity: 0 },
+          '100%': { transform: 'translateX(0px)', opacity: 1 },
         },
         menu_open: {
-          '0%': { transform: 'translateX(-15px)' ,left:"-200px"},
-          '100%': { transform: 'translateX(0px)',left:"0px" },
+          '0%': { transform: 'translateX(-15px)', left: '-200px' },
+          '100%': { transform: 'translateX(0px)', left: '0px' },
         },
         menu_close: {
-          '100%': { transform: 'translateX(0px)' ,left:"0px"},
-          '0%': { transform: 'translateX(-20px)',left:"-200px" ,width: '0px' ,visibility: 'hidden'},
+          '100%': { transform: 'translateX(0px)', left: '0px' },
+          '0%': {
+            transform: 'translateX(-20px)',
+            left: '-200px',
+            width: '0px',
+            visibility: 'hidden',
+          },
           // '0%':{visibility:""}
         },
-        
       },
       screens: {
         small: { raw: '(max-width: 540px)' },

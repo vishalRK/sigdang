@@ -1,0 +1,73 @@
+[
+  {
+    "id": 1,
+    "img":"/images/gallery/vadapav.png",
+    "title": "Vadapav",
+    "tags": ["breakfast","veg","indian"],
+    "price": 853,
+    "rating":4.5,
+    "quantity": 0
+  },
+  {
+    "id": 2,
+    "img":"/images/gallery/smosa.jpeg",
+    "title": "Smosa",
+    "tags": ["breakfast","veg","indian"],
+    "price": 310,
+    "rating":4.3,
+    "quantity": 0
+  },
+  {
+    "id": 3,
+    "img":"/images/gallery/poha.jpeg",
+    "title": "Poha",
+    "tags": ["breakfast","veg","indian"],
+    "price": 57,
+    "rating":4.1,
+    "quantity": 0
+  },
+  {
+    "id": 4,
+    "img":"/images/gallery/idli.jpg",
+    "title": "Idli",
+    "tags": ["breakfast","veg","south"],
+    "price": 495,
+    "rating":3.3,
+    "quantity": 0
+  },
+  {
+    "id": 5,
+    "img":"/images/gallery/dosa.jpeg",
+    "title": "Dosa",
+    "tags": ["breakfast","veg","south"],
+    "price": 80,
+    "rating":4.1,
+    "quantity": 0
+  },
+  {
+    "id": 6,
+    "img":"/images/gallery/burger.png",
+    "title": "Burger",
+    "tags": ["breakfast","veg","indian"],
+    "price": 477,
+    "rating":3.1,
+    "quantity": 1
+  },
+  {
+    "id": 7,
+    "img":"/images/gallery/Oemlet.jpeg",
+    "title": "Omelet",
+    "tags": ["breakfast","non-veg","indian"],
+    "price": 325,
+    "rating":3.5,
+    "quantity": 0
+  },
+  {
+    "id": 8,
+    "img":"/images/gallery/sandwich.png",
+    "title": "Sandwich",
+    "tags": ["breakfast","veg","indian"],
+    "price": 731,
+    "quantity": 0
+  }
+]
