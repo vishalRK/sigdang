@@ -6,7 +6,7 @@ export function middleware(request: NextRequest) {
   if (typeof window !== 'undefined' && window.localStorage) {
 
     const userCurreentTokern = JSON.parse(localStorage.getItem("user") || "");
-    if(userCurreentTokern.userToken === user.userToken)
+    if(userCurreentTokern.userToken)
     {
       return NextResponse.redirect(new URL('/', request.url))
     }
