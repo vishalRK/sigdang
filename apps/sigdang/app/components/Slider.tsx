@@ -32,10 +32,10 @@ const Slider = () => {
         <div key={increase} className="w-[100%] overflow-hidden  h-[100%]">
           {flow?<img
             src={`/images/gallery/pic${increase}.jpg`}
-            className={`w-[100%] large:object-cover h-[100%]  ${increase == 2 || increase < 7?"animate-right":""} `}
+            className={`w-[100%] large:object-cover h-[100%]  ${increase == 1 || increase < 7?"animate-right":""} `}
           />:<img
           src={`/images/gallery/pic${increase}.jpg`}
-          className={`w-[100%] large:object-cover h-[100%]  ${increase > 1 && increase < 7 ?"animate-left":""}`}
+          className={`w-[100%] large:object-cover h-[100%]  ${increase >= 1 && increase <= 7 ?"animate-left":""}`}
         />}
         </div>
       </div>

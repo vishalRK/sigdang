@@ -3,8 +3,8 @@ import menu from '../utils/menu.json';
 const Menu = () => {
 
   return (
-    <div className="w-[100%]  flex mt-2  justify-center bg-green-300">
-      <div className="w-[90%] small:w-[100%] h-[60vh] bg-red-400 grid grid-rows-5">
+    <div className="w-[100%]  flex mt-2  justify-center">
+      <div className="w-[90%] small:w-[100%] h-[60vh]  grid grid-rows-5">
         <div className=" row-span-1 self-center bg-yellow-300">
           <div className="  grid grid-flow-col text-center">
             <h1 className="text-[2vw] small:text-[5vw] medium:text-[3vw]">
@@ -24,10 +24,10 @@ const Menu = () => {
             </h1>
           </div>
         </div>
-        <div className="row-span-4 h-[100%] self-center bg-orange-400">
-          <div className="grid h-[100vh] small:h-[175vh] small:grid-cols-2  medium:grid-cols-3 large:grid-cols-4 p-2 gap-4 small:gap-2 bg-purple-300">
+        <div className="row-span-4 h-[100%] self-center">
+          <div className="grid h-[100vh] small:h-[175vh] small:grid-cols-2  medium:grid-cols-3 large:grid-cols-4 p-2 gap-4 small:gap-2">
             {menu.map((m) => (
-             <div key={m.id} className="w-34 small:h-[92%]  small:gap-x-0 rounded-2xl gird grid-flow-row p-2 bg-white">
+             <div key={m.id} className="w-34 small:h-[95%]  small:gap-x-0 rounded-2xl gird grid-flow-row p-2 bg-white shadow-2xl">
              <div className="rounded-2xl w-[100%] h-64 small:h-36 flex justify-center">
                <img
                  className="rounded-2xl h-[100%]  object-contain"
