@@ -1,14 +1,15 @@
 'use client';
 import React, {  useState } from 'react';
 import ErrorPupup from './ErrorPupup';
+import jwt from 'jsonwebtoken';
 // import { useNavigate } from 'react-router';
+
 const Login = () => {
   const [user, setUser] = useState({
     username: '',
     password: '',
     email: '',
   });
-
   const [isValidPassword, setIsPasswordValid] = useState(false);
   const [isValidEmail, setIsEmailValid] = useState(false);
   const [isOpen, setClosePopup] = useState(false);
@@ -55,7 +56,7 @@ const Login = () => {
         return response.json();
       })
       .then((data) => {
-        console.log(data.message);
+        localStorage.setItem("user",JSON.stringify(jwt.decode(data.userToken).data))
         if(data.message)
         {
           setIsPopupMessage(data.message);

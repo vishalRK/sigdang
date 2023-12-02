@@ -3,16 +3,14 @@ import mongoose from 'mongoose';
 import cors from 'cors';
 import userRouter from './routes/auth/user.route';
 const app = express();
-
 app.use(
-    cors({
-      origin: '*',
-      credentials: true,
-    })
+  cors({
+    origin: '*',
+    credentials: true,
+  })
   );
-app.use(express.json({ limit: '50mb' }));
-app.use(express.urlencoded({ extended: true, limit: '50mb' }));
-
+  app.use(express.json({ limit: '50mb' }));
+  app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use('/api/v1/user', userRouter);
 

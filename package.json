@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "MIT",
   "scripts": {
+    "dev-https": "next dev --experimental-https",
     "frontend": "npx nx run sigdang:serve",
     "backend": "npx nx run restaurant-backend:serve"
   },
@@ -15,6 +16,7 @@
     "cors": "^2.8.5",
     "express": "^4.18.2",
     "express-router": "^0.0.1",
+    "js-cookie": "^3.0.5",
     "jsonwebtoken": "^9.0.2",
     "mongodb": "^6.3.0",
     "mongoose": "^8.0.1",
