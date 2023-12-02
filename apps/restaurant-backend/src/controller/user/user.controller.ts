@@ -49,6 +49,7 @@ const lgoinUser = async (req, res) => {
     
     return res
       .status(201)
+      .cookie("user",usertokem)
       .json({ message: 'Login successfull', userToken: usertokem });
   } else {
     return res.status(401).json('login failed please check email and password');

@@ -1,5 +1,6 @@
 import Navbar from './components/Navbar';
 import './global.css';
+import { AuthProvider } from './utils/User';
 
 export const metadata = {
   title: 'Welcome to sigdang',
@@ -20,8 +21,13 @@ export default function RootLayout({
         rel="stylesheet"
       ></link>
       <body>
-        <Navbar />
-        {children}
+        <AuthProvider>
+          
+        <header>
+          <Navbar />
+        </header>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );

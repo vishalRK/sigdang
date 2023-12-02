@@ -2,9 +2,11 @@
 import React, {  useState } from 'react';
 import ErrorPupup from './ErrorPupup';
 import jwt from 'jsonwebtoken';
+import { useAuth } from '../utils/User';
 // import { useNavigate } from 'react-router';
 
 const Login = () => {
+  const { login } = useAuth();
   const [user, setUser] = useState({
     username: '',
     password: '',
@@ -18,6 +20,10 @@ const Login = () => {
   const handleChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     // handle changes in form fields
     setUser({ ...user, [e.target.name]: e.target.value });
+  };
+
+  const handleLogin = (username:string,email:string,avtar:string) => {
+    login(username,email,avtar);
   };
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -56,7 +62,9 @@ const Login = () => {
         return response.json();
       })
       .then((data) => {
-        localStorage.setItem("user",JSON.stringify(jwt.decode(data.userToken).data))
+        const currentUser = jwt.decode(data.userToken).data;
+        handleLogin(currentUser.username,currentUser.email,currentUser.avtar);
+        // localStorage.setItem("user",JSON.stringify(jwt.decode(data.userToken).data))
         if(data.message)
         {
           setIsPopupMessage(data.message);
