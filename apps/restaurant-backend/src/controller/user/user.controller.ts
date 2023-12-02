@@ -15,10 +15,10 @@ const registerUser = async (req, res) => {
       password: hashPassword,
     });
   } else {
-    return res.status(201).json('user is already Exist');
+    return res.status(201).json({message:'user is already Exist'});
   }
 
-  return res.status(201).json('user register successfully');
+  return res.status(201).json({message:'user register successfully'});
 };
 
 //Login section
