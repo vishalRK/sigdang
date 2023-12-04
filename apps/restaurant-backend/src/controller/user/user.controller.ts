@@ -1,6 +1,7 @@
 import { User } from '../../models/user/user.model';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 //Register Section
 const registerUser = async (req, res) => {
   const { userName, email, password } = req.body;
@@ -56,4 +57,38 @@ const lgoinUser = async (req, res) => {
   }
 };
 
-export { registerUser, lgoinUser };
+const sendEmailToAdmin = async (req, res) => {
+  const {first_name,last_name,email,phone_number,message} = req.body;
+
+  console.log("Sedn email from user to Admin");
+  if(email)
+  {
+
+    const transporter = nodemailer.createTransport({
+      host: "https://webmail.techturbine.com",
+      port: 465,
+      secure: true,
+      auth: {
+        // TODO: replace `user` and `pass` values from <https://forwardemail.net>
+        user:"vkerlekar@techturbine.com",
+        pass:"tech1mini",
+      },
+    })
+    console.log(transporter);
+    console.log("Hello");
+    const info = await transporter.sendMail({
+      from: "Vishal Kerlekar <vkerlekar@techturbine.com>", // sender address
+      to: "vishalkerlekar5@gmail.com", // list of receivers
+      subject: "Contact", // Subject line
+      text: message, // plain text body
+      html: "<b>Hello India?</b>", // html body
+    });
+    console.log("Message sent: %s", info.messageId);
+    return res.status(201).json(info);
+  }
+  return res.status(500).json("please enter email id")
+  
+  
+
+}
+export { registerUser, lgoinUser, sendEmailToAdmin };
