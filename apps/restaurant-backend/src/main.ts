@@ -2,6 +2,7 @@ import express from 'express';
 import mongoose from 'mongoose';
 import cors from 'cors';
 import userRouter from './routes/auth/user.route';
+import contactRouter from './routes/contact/contact.route';
 const app = express();
 app.use(
   cors({
@@ -13,6 +14,7 @@ app.use(
   app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 
 app.use('/api/v1/user', userRouter);
+app.use('/api/v1/contact', contactRouter);
 
 mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASS}@cluster0.y1iwedf.mongodb.net/?retryWrites=true&w=majority`,{
 // mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASS}@cluster0.nl1tgvo.mongodb.net/?retryWrites=true&w=majority`,{

@@ -1,3 +1,4 @@
+import Script from 'next/script';
 import Navbar from './components/Navbar';
 import './global.css';
 import { AuthProvider } from './utils/User';
@@ -19,16 +20,18 @@ export default function RootLayout({
       <link
         href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
         rel="stylesheet"
-      ></link>
+        >
+        </link>
       <body>
         <AuthProvider>
-          
-        <header>
-          <Navbar />
-        </header>
+          <header>
+            <Navbar />
+          </header>
           {children}
         </AuthProvider>
+      <Script src="https://smtpjs.com/v3/smtp.js"></Script>
       </body>
+       
     </html>
   );
 }

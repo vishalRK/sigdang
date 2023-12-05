@@ -1,6 +1,7 @@
 import { User } from '../../models/user/user.model';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
+import nodemailer from 'nodemailer';
 //Register Section
 const registerUser = async (req, res) => {
   const { userName, email, password } = req.body;
@@ -55,5 +56,6 @@ const lgoinUser = async (req, res) => {
     return res.status(401).json('login failed please check email and password');
   }
 };
+
 
 export { registerUser, lgoinUser };
