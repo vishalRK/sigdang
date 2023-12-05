@@ -31,11 +31,11 @@ const Contact = () => {
             // Host:"smtp.elasticemail.com",
             // Port:2525,
             // Domain:data?.data?.domain,
-            SecureToken: 'b4b1a366-c00a-4035-a07e-80f467c4e01b',
-            To: "vishal.restaurant@yopmail.com",
-            From: "vishalkerlekar5@gmail.com",
+            SecureToken: '7d13fa6a-8bc7-407b-aa94-7962f9bc7c3b',
+            To: "vishalkerlekar5@gmail.com",
+            From: 'vishalkerlekar5@hotmail.com',
             Subject: 'Enquiry Form',
-            Body: `<h1>my name is ${contactForm.firstName} ${contactForm.lastName},</h1>`,
+            Body: `<h1>my name is ${contactForm.firstName} ${contactForm.lastName}, This is new Email</h1>`,
           };
           if (window.Email) {
             window.Email.send(config)
