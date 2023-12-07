@@ -27,7 +27,7 @@ const [qunatity,setQunatity] = useState<Number>(0);
 
       console.log(data?.products);
   })
- })
+ },[])
   return (
     <div className="w-[100%]  flex mt-2  justify-center">
       <div className="w-[90%] small:w-[100%] h-[60vh]  grid grid-rows-5">
