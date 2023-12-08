@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { Cart } from '../../models/cart/cart.model';
 import { User } from '../../models/user/user.model';
+import { Product } from '../../models/product/product.model';
 
 const setCart = async (req, res) => {
   const { productId } = req.body;
@@ -19,11 +20,15 @@ const setCart = async (req, res) => {
     });
     return res.status(201).json({ message: 'Item add in cart Successfully' });
   } else {
-    const product = cart.items.find(
+    const product = await Product.findById(productId);
+    if(!product){
+      return res.status(500).json({message:"product is not found in product database please add valid product"})
+    }
+    const cartproduct = cart.items.find(
       (item) => item.product_id.toString() === productId
     );
 
-    if (!product) {
+    if (!cartproduct) {
       cart.items.push({ product_id: productId });
       await cart.save();
       return res.status(201).json({ message: 'Item add in cart Successfully' });

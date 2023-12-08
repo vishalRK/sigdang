@@ -2,6 +2,7 @@ import { User } from '../../models/user/user.model';
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import nodemailer from 'nodemailer';
+import { Cart } from '../../models/cart/cart.model';
 //Register Section
 const registerUser = async (req, res) => {
   const { userName, email, password } = req.body;
@@ -38,6 +39,7 @@ const lgoinUser = async (req, res) => {
       {
         exp: Math.floor(Date.now() / 1000) + 60 * 60,
         data: {
+          userId:user._id,
           username: user.userName,
           email: user.email,
           password: user.password,
@@ -47,11 +49,52 @@ const lgoinUser = async (req, res) => {
       process.env.JSON_WEB_TOKEN_SECRETE
     );
 
-    
-    return res
-      .status(201)
-      .cookie("user",usertokem)
-      .json({ message: 'Login successfull', userToken: usertokem });
+    const cart = await Cart.aggregate([
+      {
+        $match: { user_id: user._id}
+      },
+      {
+        $unwind: "$items"
+      },
+      {
+        $lookup: {
+          from: "products",
+          localField: "items.product_id",
+          foreignField: "_id",
+          as: "items.product"
+        }
+      },
+      {
+        $unwind: "$items.product"
+      },
+      {
+        $project: {
+          "user_id": 1,
+          "product_id": "$items.product._id",
+          "product_name": "$items.product.title",
+          "product_image": "$items.product.image",
+          "product_price": "$items.product.price",
+          "quantity": "$items.quantity"
+          // Add more fields as needed
+        }
+      }
+    ]).exec();
+    console.log(cart);
+    if(!cart)
+    {
+
+      return res
+        .status(201)
+        .cookie("user",usertokem)
+        .json({ message: 'Login successfull', userToken: usertokem });
+      }
+      else{
+      return res
+        .status(201)
+        .cookie("user",usertokem)
+        .json({ message: 'Login successfull', userToken: usertokem ,cart:cart});
+
+    }
   } else {
     return res.status(401).json('login failed please check email and password');
   }
