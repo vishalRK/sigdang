@@ -1,10 +1,16 @@
-'use client';
+"use client"
 import React, { useEffect, useLayoutEffect, useState } from 'react';
 import menu from '../utils/menu.json';
 import Image from 'next/image';
 import CartIncrementButton from './CartIncrementButton';
 import CartDecrementButton from './CartDecrementButton';
 import { useAuth } from '../utils/User';
+import { useDispatch ,useSelector} from 'react-redux';
+import { RootState } from 'apps/sigdang/redux/store';
+import { fetchProducts } from 'apps/sigdang/redux/productSlice';
+
+// import { useDispatch,useSelector } from 'react-redux';
+// import { incrementQuantity,selectCartItems } from 'apps/sigdang/features/cart/cart';
 type Products = {
   _id: string;
   image: string;
@@ -16,73 +22,87 @@ type Products = {
 };
 const Menu = () => {
   const { cart, users } = useAuth();
-  const [products, setProducts] = useState<Products[]>([]);
-  const [qunatity, setQunatity] = useState<number>(0);
+  const dispatch = useDispatch();
+  const { data, loading, error } = useSelector(
+    (state: RootState) => state.product
+  );
+  // const dispatch = useDispatch();
+  // const cartItems = useSelector(selectCartItems);
+  // const [products, setProducts] = useState<Products[]>([]);
+  let products:Products[];
+  // const [qunatity, setQunatity] = useState<number>(0);
   useEffect(() => {
-    fetch('http://localhost:3000/api/v1/product/getproduct')
-      .then((response) => {
-        if (!response.ok) {
-          console.log('hellow');
-        }
-        return response.json();
-      })
-      .then((data) => {
-        if (cart.length > 0) {
-          console.log(cart);
-        }
-        const updatedProducts = data.products.map((product: Products) => {
-          const cartItem = cart.find((item) => item.product_id === product._id);
-          console.log(cartItem);
-          return {
-            ...product,
-            quantity: cartItem?.quantity ? cartItem?.quantity : 0,
-          };
-        });
+    dispatch(fetchProducts());
+    // fetch('http://localhost:3000/api/v1/product/getproduct')
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       console.log('hellow');
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((data) => {
+    //     if (cart.length > 0) {
+    //       console.log(cart);
+    //     }
+    //     const updatedProducts = data.products.map((product: Products) => {
+    //       const cartItem = cart.find((item) => item.product_id === product._id);
+    //       console.log(cartItem);
+    //       return {
+    //         ...product,
+    //         quantity: cartItem?.quantity ? cartItem?.quantity : 0,
+    //       };
+    //     });
 
-        setProducts(updatedProducts);
+    //     // setProducts(updatedProducts);
+    //     products = updatedProducts
 
-        // if( data.products)
-        // {
+    //     // if( data.products)
+    //     // {
 
-        //   cart.forEach((p) => {
+    //     //   cart.forEach((p) => {
 
-        // data.product.filter(p => p._id === p. )
-        //     console.log(p);
-        // Assuming you want to set the product quantity to the state
+    //     // data.product.filter(p => p._id === p. )
+    //     //     console.log(p);
+    //     // Assuming you want to set the product quantity to the state
 
-        // setProducts((products:Products[]) => [... data.product.filter((p) => p._id === p.product_id ), {quantity:p.quantity}]);
+    //     // setProducts((products:Products[]) => [... data.product.filter((p) => p._id === p.product_id ), {quantity:p.quantity}]);
 
-        // });
-        // }
-      });
-  }, [cart]);
-  console.log(products);
+    //     // });
+    //     // }
+    //   });
+  }, [dispatch]);
+  // console.log(products);
   const addCart = (productId: string) => {
     console.log(productId);
-    fetch(`http://localhost:3000/api/v1/cart/setCart/${users.userId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        productId: productId,
-      }),
-    })
-      .then((response) => {
-        if (!response.ok) {
-          return response.text().then((text) => {
-            throw new Error(text);
-          });
-          // return response;
-        }
-        return response.json();
-      })
-      .then((data) => {
-        alert(data.message);
-      })
-      .catch((err) => {
-        alert(JSON.parse(err.message).message);
-      });
+    // if(productId && users.userId)
+    // {
+    //   dispatch(incrementQuantity(productId,users.userId));
+    // }
+
+    // fetch(`http://localhost:3000/api/v1/cart/setCart/${users.userId}`, {
+    //   method: 'POST',
+    //   headers: {
+    //     'Content-Type': 'application/json',
+    //   },
+    //   body: JSON.stringify({
+    //     productId: productId,
+    //   }),
+    // })
+    //   .then((response) => {
+    //     if (!response.ok) {
+    //       return response.text().then((text) => {
+    //         throw new Error(text);
+    //       });
+    //       // return response;
+    //     }
+    //     return response.json();
+    //   })
+    //   .then((data) => {
+    //     alert(data.message);
+    //   })
+    //   .catch((err) => {
+    //     alert(JSON.parse(err.message).message);
+    //   });
   };
   return (
     <div className="w-[100%]  flex mt-2  justify-center">
@@ -108,10 +128,10 @@ const Menu = () => {
         </div>
         <div className="row-span-4 h-[100%] self-center">
           <div className="grid h-[100vh] small:h-[100%] small:grid-cols-2  medium:grid-cols-3 large:grid-cols-4 p-2 gap-4 small:gap-2">
-            {products.map((m) => (
+            {data?.map((m) => (
               <div
-                key={m.id}
-                className="w-34 small:h-[95%] medium:h-[95%] large:h-[100%] small:gap-x-0 rounded-2xl gird grid-flow-row p-2 bg-white shadow-2xl"
+                key={+m._id}
+                className="w-34 small:h-[95%] medium:h-[95%] large:h-[100%] smd:h-[70%] small:gap-x-0 rounded-2xl gird grid-flow-row p-2 bg-white shadow-2xl"
               >
                 <div className="rounded-2xl w-[100%] h-64 small:h-36 flex justify-center">
                   <Image

@@ -65,6 +65,7 @@ const Login = () => {
       })
       .then((data) => {
         const currentUser = jwt.decode(data.userToken).data;
+        console.log(currentUser);
         handleLogin(currentUser.username,currentUser.email,currentUser.avtar,currentUser.userId);
         const cartItems = data.cart;
         

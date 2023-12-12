@@ -50,7 +50,20 @@ const incrementQuantity = async (req, res) => {
   if (!user) {
     return res.status(500).json({ message: 'user not found' });
   }
-  const crt = await Cart.findOne({ user_id: user._id });
+  let crt = await Cart.findOne({ user_id: user._id });
+  console.log(crt);
+  if (!crt) {
+    crt = await Cart.create({
+      user_id: user._id,
+      items: [{ product_id: productId }],
+    });
+    if(crt.user_id.toString() === user._id.toString()) 
+    {
+
+      return res.status(201).json({ message: 'Item add in cart Successfully' });
+    }
+  }
+  
 
   const product = await crt.items.find(
     (item) => item.product_id.toString() === productId
@@ -67,11 +80,14 @@ const incrementQuantity = async (req, res) => {
         $inc: { 'items.$.quantity': 1 },
       }
     );
+   
     if (!cart) {
       return res.status(500).json({ message: 'cart not found' });
     }
   }
-  return res.status(201).json({ message: 'quantity is update' });
+  const updatedCart = await Cart.findOne({user_id: user._id});
+  console.log(updatedCart);
+  return res.status(201).json({ message: 'quantity is update',updatedCart:updatedCart.items });
 };
 const decrementQuantity = async (req, res) => {
   const { productId } = req.body;
