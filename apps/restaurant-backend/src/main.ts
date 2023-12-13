@@ -20,8 +20,8 @@ app.use('/api/v1/contact', contactRouter);
 app.use('/api/v1/cart', cartRouter);
 app.use('/api/v1/product', productRouter);
 
-// mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASS}@cluster0.y1iwedf.mongodb.net/?retryWrites=true&w=majority`,{
-mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASS}@cluster0.nl1tgvo.mongodb.net/?retryWrites=true&w=majority`,{
+mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASS}@cluster0.y1iwedf.mongodb.net/?retryWrites=true&w=majority`,{
+// mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASS}@cluster0.nl1tgvo.mongodb.net/?retryWrites=true&w=majority`,{
     dbName:"restaurant"
 }).then(() => {
     console.log("Database Connected");

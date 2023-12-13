@@ -41,6 +41,22 @@ const setCart = async (req, res) => {
 
   // return res.status(201).json(user);
 };
+const getCart = async (req, res) => {
+  const user = await User.findById(req.params.userId);
+
+  if (!user) {
+    return res.status(500).json({ message: 'user not found' });
+  }
+
+  const cart = await Cart.findOne({user_id:user});
+
+  if(!cart){
+    return res.status(500).json({message:"please add some product"})
+  }
+
+  return res.status(200).json({message:"cart fetch successfully",cart:cart});
+
+}
 
 const incrementQuantity = async (req, res) => {
   const { productId } = req.body;
@@ -69,7 +85,9 @@ const incrementQuantity = async (req, res) => {
     (item) => item.product_id.toString() === productId
   );
   if (!product) {
-    return res.status(500).json({ message: 'product is not found' });
+    await crt.items.push({ product_id: productId });
+    crt.save();
+    return res.status(500).json({ message: 'product is added in cart successfully' ,updatedCart:crt});
   } else {
     const cart = await Cart.updateOne(
       {
@@ -86,8 +104,8 @@ const incrementQuantity = async (req, res) => {
     }
   }
   const updatedCart = await Cart.findOne({user_id: user._id});
-  console.log(updatedCart);
-  return res.status(201).json({ message: 'quantity is update',updatedCart:updatedCart.items });
+
+  return res.status(201).json({ message: 'quantity is update',updatedCart:updatedCart });
 };
 const decrementQuantity = async (req, res) => {
   const { productId } = req.body;
@@ -105,6 +123,10 @@ const decrementQuantity = async (req, res) => {
   if (!product) {
     return res.status(500).json({ message: 'product is not found' });
   } else {
+    if(product.quantity >= 2)
+    {
+
+    
     const cart = await Cart.updateOne(
       {
         user_id: new mongoose.Types.ObjectId(req.params.userId),
@@ -117,8 +139,20 @@ const decrementQuantity = async (req, res) => {
     if (!cart) {
       return res.status(500).json({ message: 'cart not found' });
     }
+    const updatedCart = await Cart.findOne({user_id:user});
+    if(!updatedCart)
+    {
+      return res.status(500).json({ message: 'cart not found' });
+    }
+    return res.status(201).json({ message: 'quantity is update',updatedCart:updatedCart});
   }
-  return res.status(201).json({ message: 'quantity is update' });
+  else if(product.quantity == 1)
+  {
+    const product = await crt.items.filter(item => item.product_id.toString() !== productId);
+    return res.status(201).json({ message: 'quantity is update',updatedCart:product});
+
+  }
+}
 };
 const deleteCartItem = async (req, res) => {
   const { productId } = req.body;
@@ -154,4 +188,4 @@ const deleteCartItem = async (req, res) => {
 
 
 };
-export { setCart, incrementQuantity, decrementQuantity, deleteCartItem };
+export { setCart, incrementQuantity, decrementQuantity, deleteCartItem,getCart };

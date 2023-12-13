@@ -1,12 +1,17 @@
 import React, { useEffect } from 'react'
 import { useAuth } from '../utils/User'
+import { RootState } from 'apps/sigdang/redux/store';
+import { useDispatch } from 'react-redux';
+import { setCart } from 'apps/sigdang/redux/cartSlice';
 type Incremnt  ={
     classname:string,
-    productId:string
+    productId:string,
+    text:string
 }
-const CartIncrementButton = ({classname,productId}:Incremnt) => {
-    console.log(productId);
+const CartIncrementButton = ({classname,productId,text}:Incremnt) => {
+    
     const {users} = useAuth();
+    const dispatch = useDispatch();
     const buttonClick = () => {
 
         fetch(`http://localhost:3000/api/v1/cart/incrementQuantity/${users.userId}`,{
@@ -25,13 +30,13 @@ const CartIncrementButton = ({classname,productId}:Incremnt) => {
             }
             return response.json();
         }).then(data => {
-            console.log(data);
+            dispatch(setCart(data?.updatedCart));
         }).catch(error => {console.log(error)})
     }
   
     
   return (
-      <button key={productId} className={`${classname}`} onClick={() => buttonClick()}>+</button>
+      <button key={productId} className={`${classname}`} onClick={() => buttonClick()}>{text}</button>
   )
 }
 

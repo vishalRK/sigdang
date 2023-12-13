@@ -46,7 +46,7 @@ const lgoinUser = async (req, res) => {
           avtar: user.avtar,
         },
       },
-      process.env.SECRET_JSON_WEB_TOKEN
+      process.env.JSON_WEB_TOKEN_SECRETE
     );
 
     const cart = await Cart.aggregate([
