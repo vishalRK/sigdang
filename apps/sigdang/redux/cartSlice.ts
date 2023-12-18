@@ -12,16 +12,25 @@ interface CartState {
   user_id: string | null;
   items: CartItem[];
 }
-
 const initialState: CartState = {
-  _id: null,
-  user_id: null,
-  items: [],
-};
+    _id: null,
+    user_id: null,
+    items: [],
+  };
+  const loadCartFromLocalStorage = (): CartState => {
+    if (typeof window !== 'undefined' && window.localStorage) {
+      const cartFromLocalStorage = localStorage.getItem('cart');
+      return cartFromLocalStorage ? JSON.parse(cartFromLocalStorage) : initialState;
+    } else {
+      return initialState;
+    }
+  };
+  // const initialState: CartState = loadCartFromLocalStorage();
+
 
 const cartSlice = createSlice({
   name: 'cart',
-  initialState,
+  initialState:loadCartFromLocalStorage(),
   reducers: {
     setCart: (state, action: PayloadAction<CartState>) => {
       return action.payload;

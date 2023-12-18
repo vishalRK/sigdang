@@ -48,12 +48,10 @@ const Menu = () => {
       .then((data) => {
         console.log("HI")
         const updatedProducts = data.products.map((product: Products) => {
-        const carts = localStorage.getItem('cart');
-        const cartss: CartState | null = carts ? JSON.parse(carts) : null;
-        if(cartss)
+        if(cart)
         {
 
-          const cartItem = cartss.items.find(
+          const cartItem = cart.items.find(
               (item) => item.product_id.toString() === product._id.toString()
               );
             
@@ -74,8 +72,8 @@ const Menu = () => {
      
   }, []);
 console.log(products)
-  const addCart = (productId: string) => {
-    console.log(productId);
+  const addProducts = (products:Products) => {
+    console.log(products);
     // if(productId && users.userId)
     // {
     //   dispatch(incrementQuantity(productId,users.userId));
@@ -106,6 +104,7 @@ console.log(products)
     //     alert(JSON.parse(err.message).message);
     //   });
   };
+  console.log(products);
   return (
     <div className="w-[100%]  flex mt-2  justify-center">
       <div className="w-[90%] small:w-[100%] h-[60vh]  grid grid-rows-5">
@@ -182,6 +181,8 @@ console.log(products)
                           classname="w-[30%] h-10 bg-purple-300 rounded-xl text-white text-[3vw] font-lobster"
                           productId={m._id}
                           text="+"
+                          products={products}
+                          setProduct={setProducts}
                         />
                         {/* <button className="w-[30%] h-10 bg-purple-300 rounded-xl text-white font-lobster">+</button> */}
                         <h1 className="w-12 bg-purple-300 rounded-lg  text-[25px] text-white text-center font-bold">
@@ -195,6 +196,8 @@ console.log(products)
                         classname="w-[100%] h-10 bg-purple-300 rounded-xl text-white font-lobster"
                         productId={m._id}
                         text="Add to Cart"
+                        products={products}
+                        setProduct={setProducts}
                       />
                     )}
                   </div>
