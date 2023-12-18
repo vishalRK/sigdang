@@ -1,6 +1,7 @@
 import mongoose, { Schema } from 'mongoose';
 import { Cart } from '../../models/cart/cart.model';
 import { User } from '../../models/user/user.model';
+import { Product } from '../../models/product/product.model';
 
 const setCart = async (req, res) => {
   const { productId } = req.body;
@@ -19,11 +20,15 @@ const setCart = async (req, res) => {
     });
     return res.status(201).json({ message: 'Item add in cart Successfully' });
   } else {
-    const product = cart.items.find(
+    const product = await Product.findById(productId);
+    if(!product){
+      return res.status(500).json({message:"product is not found in product database please add valid product"})
+    }
+    const cartproduct = cart.items.find(
       (item) => item.product_id.toString() === productId
     );
 
-    if (!product) {
+    if (!cartproduct) {
       cart.items.push({ product_id: productId });
       await cart.save();
       return res.status(201).json({ message: 'Item add in cart Successfully' });
@@ -36,6 +41,22 @@ const setCart = async (req, res) => {
 
   // return res.status(201).json(user);
 };
+const getCart = async (req, res) => {
+  const user = await User.findById(req.params.userId);
+
+  if (!user) {
+    return res.status(500).json({ message: 'user not found' });
+  }
+
+  const cart = await Cart.findOne({user_id:user}).populate('items.product_id');
+  console.log(cart);
+  if(!cart){
+    return res.status(500).json({message:"please add some product"})
+  }
+
+  return res.status(201).json({message:"cart fetch successfully",cart:cart});
+
+}
 
 const incrementQuantity = async (req, res) => {
   const { productId } = req.body;
@@ -43,15 +64,32 @@ const incrementQuantity = async (req, res) => {
   const user = await User.findById(req.params.userId);
 
   if (!user) {
-    return res.status(500).json({ message: 'user not found' });
+    return res.status(401).json({ message: 'user not found' });
   }
-  const crt = await Cart.findOne({ user_id: user._id });
+  let crt = await Cart.findOne({ user_id: user._id });
+
+  if (!crt) {
+    crt = await Cart.create({
+      user_id: user._id,
+      items: [{ product_id: productId }],
+    });
+    if(crt.user_id.toString() === user._id.toString()) 
+    {
+
+      return res.status(201).json({ message: 'Item add in cart Successfully' });
+    }
+  }
+  
 
   const product = await crt.items.find(
     (item) => item.product_id.toString() === productId
   );
   if (!product) {
-    return res.status(500).json({ message: 'product is not found' });
+    await crt.items.push({ product_id: productId });
+    crt.save();
+    const addedCartItem = await Cart.findOne({user_id:user});
+    console.log(addedCartItem);
+    return res.status(201).json({ message: 'product is added in cart successfully' ,updatedCart:addedCartItem});
   } else {
     const cart = await Cart.updateOne(
       {
@@ -62,11 +100,14 @@ const incrementQuantity = async (req, res) => {
         $inc: { 'items.$.quantity': 1 },
       }
     );
+   
     if (!cart) {
       return res.status(500).json({ message: 'cart not found' });
     }
   }
-  return res.status(201).json({ message: 'quantity is update' });
+  const updatedCart = await Cart.findOne({user_id: user._id});
+
+  return res.status(201).json({ message: 'quantity is update',updatedCart:updatedCart });
 };
 const decrementQuantity = async (req, res) => {
   const { productId } = req.body;
@@ -74,7 +115,7 @@ const decrementQuantity = async (req, res) => {
   const user = await User.findById(req.params.userId);
 
   if (!user) {
-    return res.status(500).json({ message: 'user not found' });
+    return res.status(401).json({ message: 'user not found' });
   }
   const crt = await Cart.findOne({ user_id: user._id });
 
@@ -82,8 +123,13 @@ const decrementQuantity = async (req, res) => {
     (item) => item.product_id.toString() === productId
   );
   if (!product) {
-    return res.status(500).json({ message: 'product is not found' });
+    return res.status(401).json({ message: 'product is not found' });
   } else {
+    if(product.quantity >= 1)
+    {
+
+    
+      
     const cart = await Cart.updateOne(
       {
         user_id: new mongoose.Types.ObjectId(req.params.userId),
@@ -92,13 +138,45 @@ const decrementQuantity = async (req, res) => {
       {
         $inc: { 'items.$.quantity': -1 },
       }
+
     );
+    
     if (!cart) {
       return res.status(500).json({ message: 'cart not found' });
     }
+    const updatedCart = await Cart.findOne({user_id:user});
+    const product = await updatedCart.items.find(item => item.product_id.toString() === productId);
+    if(product.quantity == 0 )
+    {
+      const deleteProductCart = await Cart.updateOne(
+        {
+          user_id: new mongoose.Types.ObjectId(user._id),
+        },
+        {
+          $pull: {
+            items: { product_id: new mongoose.Types.ObjectId(productId) },
+          },
+        }
+    
+      )
+      console.log(deleteProductCart)
+    }
+    const deleteUpdatedCart = await Cart.findOne({user_id:user});
+    if(!updatedCart)
+    {
+      return res.status(401).json({ message: 'cart not found' });
+    }
+    return res.status(201).json({ message: 'quantity is update',updatedCart:deleteUpdatedCart});
   }
-  return res.status(201).json({ message: 'quantity is update' });
+  else if(product.quantity == 1)
+  {
+    const product = await crt.items.filter(item => item.product_id.toString() !== productId);
+    return res.status(201).json({ message: 'quantity is update',updatedCart:product});
+
+  }
+}
 };
+
 const deleteCartItem = async (req, res) => {
   const { productId } = req.body;
   const user = await User.findById(req.params.userId);
@@ -133,4 +211,4 @@ const deleteCartItem = async (req, res) => {
 
 
 };
-export { setCart, incrementQuantity, decrementQuantity, deleteCartItem };
+export { setCart, incrementQuantity, decrementQuantity, deleteCartItem,getCart };

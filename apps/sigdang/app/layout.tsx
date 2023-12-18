@@ -1,7 +1,11 @@
+
 import Script from 'next/script';
 import Navbar from './components/Navbar';
 import './global.css';
 import { AuthProvider } from './utils/User';
+import { Provider } from 'react-redux';
+import ReduxProvider from '../redux/ReduxProvider';
+
 
 export const metadata = {
   title: 'Welcome to sigdang',
@@ -14,24 +18,35 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
-      <link rel="preconnect" href="https://fonts.googleapis.com" />
-      <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
-      <link
-        href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
-        rel="stylesheet"
+    <ReduxProvider>
+
+      <html lang="en">
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="" />
+        <link
+          href="https://fonts.googleapis.com/css2?family=Lobster&display=swap"
+          rel="stylesheet"
         >
         </link>
-      <body>
-        <AuthProvider>
-          <header>
-            <Navbar />
-          </header>
-          {children}
-        </AuthProvider>
-      <Script src="https://smtpjs.com/v3/smtp.js"></Script>
-      </body>
-       
-    </html>
+        <body>
+
+          <AuthProvider>
+
+
+            <header>
+              <Navbar />
+            </header>
+            {children}
+
+          </AuthProvider>
+
+
+
+
+          <Script src="https://smtpjs.com/v3/smtp.js"></Script>
+        </body>
+
+      </html>
+    </ReduxProvider>
   );
 }

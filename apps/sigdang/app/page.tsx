@@ -1,7 +1,6 @@
 import Menu from './components/Menu';
 import Slider from './components/Slider';
 import styles from './page.module.css';
-
 export default async function Index() {
   /*
    * Replace the elements below with your own.
@@ -10,8 +9,8 @@ export default async function Index() {
    */
   return (
     <div className="h-[60vh]">
-      <Slider />
-      <Menu />
-    </div>
+        <Slider />
+        <Menu />
+      </div>
   );
 }

@@ -3,10 +3,11 @@ import React, {  useState } from 'react';
 import ErrorPupup from './ErrorPupup';
 import jwt from 'jsonwebtoken';
 import { useAuth } from '../utils/User';
+
 // import { useNavigate } from 'react-router';
 
 const Login = () => {
-  const { login } = useAuth();
+  const { login , addToCart} = useAuth();
   const [user, setUser] = useState({
     username: '',
     password: '',
@@ -22,9 +23,10 @@ const Login = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = (username:string,email:string,avtar:string) => {
-    login(username,email,avtar);
+  const handleLogin = (username:string,email:string,avtar:string,userId:string) => {
+    login(username,email,avtar,userId);
   };
+  
 
   const onSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -63,7 +65,17 @@ const Login = () => {
       })
       .then((data) => {
         const currentUser = jwt.decode(data.userToken).data;
-        handleLogin(currentUser.username,currentUser.email,currentUser.avtar);
+        console.log(currentUser);
+        handleLogin(currentUser.username,currentUser.email,currentUser.avtar,currentUser.userId);
+        const cartItems = data.cart;
+        
+        // Update the local cart state or use addToCart for each item
+       if(cartItems )
+       {
+       
+        addToCart(cartItems);
+       }
+        
         // localStorage.setItem("user",JSON.stringify(jwt.decode(data.userToken).data))
         if(data.message)
         {
