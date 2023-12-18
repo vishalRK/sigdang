@@ -1,8 +1,9 @@
-import React, { useEffect } from 'react'
+"use client";
+import React from 'react'
 import { useAuth } from '../utils/User'
-import { RootState } from 'apps/sigdang/redux/store';
 import { useDispatch } from 'react-redux';
 import { setCart } from 'apps/sigdang/redux/cartSlice';
+import { useRouter } from 'next/navigation';
 type Products = {
     _id: string;
     image: string;
@@ -12,15 +13,20 @@ type Products = {
     rating: number;
     quantity: number;
   };
+  interface items {
+      product_id: string;
+      quantity: number;
+    }
+  
 type Incremnt  ={
     classname:string,
     productId:string,
     text:string,
-    products:Products[],
-    setProduct: React.Dispatch<React.SetStateAction<Products[]>>;
+    products?:Products[],
+    setProduct?: React.Dispatch<React.SetStateAction<Products[]>>;
 }
 const CartIncrementButton = ({classname,productId,text,setProduct,products}:Incremnt) => {
-    
+    const navigate = useRouter();
     const {users} = useAuth();
     const dispatch = useDispatch();
     const buttonClick = () => {
@@ -41,12 +47,12 @@ const CartIncrementButton = ({classname,productId,text,setProduct,products}:Incr
             }
             return response.json();
         }).then(data => {
-            const updatedProducts = products.map((product: Products) => {
+            const updatedProducts = products?.map((product: Products) => {
                 if(data.cart)
                 {
         
                   const cartItem = data.cart.items.find(
-                      (item) => item.product_id.toString() === product._id.toString()
+                      (item:items) => item.product_id.toString() === product._id.toString()
                       );
                     
               
@@ -59,14 +65,20 @@ const CartIncrementButton = ({classname,productId,text,setProduct,products}:Incr
                     }
                     return product;
                   });
-            setProduct(updatedProducts);
+                 
+                if(setProduct && updatedProducts)
+                {
+
+                    setProduct(updatedProducts);
+                }
+                  
             dispatch(setCart(data?.updatedCart));
         }).catch(error => {console.log(error)})
     }
   
     
   return (
-      <button key={productId} className={`${classname}`} onClick={() => buttonClick()}>{text}</button>
+      <button key={productId} className={`${classname}`} onClick={() => users?.userId?buttonClick():navigate.push("/Login")}>{text}</button>
   )
 }
 

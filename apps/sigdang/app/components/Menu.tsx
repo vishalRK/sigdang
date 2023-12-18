@@ -1,25 +1,15 @@
 'use client';
-import React, { useEffect, useLayoutEffect, useState } from 'react';
-import menu from '../utils/menu.json';
+import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
 import CartIncrementButton from './CartIncrementButton';
 import CartDecrementButton from './CartDecrementButton';
 import { useAuth } from '../utils/User';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'apps/sigdang/redux/store';
-import { fetchProducts } from 'apps/sigdang/redux/productSlice';
-import { setCart } from 'apps/sigdang/redux/cartSlice';
 
 // import { useDispatch,useSelector } from 'react-redux';
 // import { incrementQuantity,selectCartItems } from 'apps/sigdang/features/cart/cart';
-interface CartState {
-  _id: string | null;
-  user_id: string | null;
-  items: {
-    product_id: string;
-    quantity: number;
-  }[];
-}
+
 type Products = {
   _id: string;
   image: string;
@@ -46,65 +36,33 @@ const Menu = () => {
         return response.json();
       })
       .then((data) => {
-        console.log("HI")
-        const updatedProducts = data.products.map((product: Products) => {
-        if(cart)
+        if(data.products)
         {
 
-          const cartItem = cart.items.find(
-              (item) => item.product_id.toString() === product._id.toString()
-              );
-            
-      
-                return {
-                  ...product,
-                  quantity: cartItem?.quantity ? cartItem?.quantity : 0,
-                };
+          const updatedProducts = data.products.map((product: Products) => {
+
+          if(cart)
+          {
+            console.log(cart)
+  
+            const cartItem = cart.items.find(
+                (item) => item.product_id.toString() === product._id.toString()
+                );
+                  return {
+                    ...product,
+                    quantity: cartItem?.quantity ? cartItem?.quantity : 0,
+                  };
+                
+                
+              }
+            });
               
-              
-            }
-          });
-          
-            
-          setProducts(updatedProducts);
+            setProducts(updatedProducts);
+        }
         });
           
      
-  }, []);
-console.log(products)
-  const addProducts = (products:Products) => {
-    console.log(products);
-    // if(productId && users.userId)
-    // {
-    //   dispatch(incrementQuantity(productId,users.userId));
-    // }
-
-    // fetch(`http://localhost:3000/api/v1/cart/setCart/${users.userId}`, {
-    //   method: 'POST',
-    //   headers: {
-    //     'Content-Type': 'application/json',
-    //   },
-    //   body: JSON.stringify({
-    //     productId: productId,
-    //   }),
-    // })
-    //   .then((response) => {
-    //     if (!response.ok) {
-    //       return response.text().then((text) => {
-    //         throw new Error(text);
-    //       });
-    //       // return response;
-    //     }
-    //     return response.json();
-    //   })
-    //   .then((data) => {
-    //     alert(data.message);
-    //   })
-    //   .catch((err) => {
-    //     alert(JSON.parse(err.message).message);
-    //   });
-  };
-  console.log(products);
+  }, [cart]);
   return (
     <div className="w-[100%]  flex mt-2  justify-center">
       <div className="w-[90%] small:w-[100%] h-[60vh]  grid grid-rows-5">
@@ -175,7 +133,7 @@ console.log(products)
                     </h3>
                   </div>
                   <div className="p-3 ">
-                    {m?.quantity > 0 ? (
+                    {m?.quantity > 0 && users.userId? (
                       <div className="flex justify-between">
                         <CartIncrementButton
                           classname="w-[30%] h-10 bg-purple-300 rounded-xl text-white text-[3vw] font-lobster"
@@ -188,7 +146,10 @@ console.log(products)
                         <h1 className="w-12 bg-purple-300 rounded-lg  text-[25px] text-white text-center font-bold">
                           {+m?.quantity}
                         </h1>
-                        <CartDecrementButton classname="w-[30%] h-10 bg-purple-300 rounded-xl text-white font-lobster" />
+                        <CartDecrementButton classname="w-[30%] h-10 bg-purple-300 rounded-xl text-white font-lobster"  productId={m._id}
+                          text="-"
+                          products={products}
+                          setProduct={setProducts} />
                         {/* <button className="w-[30%] h-10 bg-purple-300 rounded-xl text-white font-lobster">-</button> */}
                       </div>
                     ) : (
