@@ -19,16 +19,15 @@ const userSchema = new Schema({
         type:String,
         require:true
     },
-    address: [
-        {
+    address: {
           pinCode: { type: String },
           street: { type: String },
           country: { type: String },
           city: { type: String },
           state: { type: String },
           contact:{ type: String },
-        },
-      ],
+        }
+      
 
 },{timestamps:true})
 
