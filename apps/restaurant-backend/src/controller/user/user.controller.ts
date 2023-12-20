@@ -15,6 +15,14 @@ const registerUser = async (req, res) => {
       userName: userName,
       email: email,
       password: hashPassword,
+      address: {
+        pinCode: '',
+        street: '',
+        country:'',
+        city: '',
+        contact:'',
+        state: '',
+      },
     });
   } else {
     return res.status(201).json({message:'user is already Exist'});
@@ -22,6 +30,49 @@ const registerUser = async (req, res) => {
 
   return res.status(201).json({message:'user register successfully'});
 };
+
+//update profile
+
+const upDateProfileData = async (req, res) => {
+  const user = await User.findById(req.params.userId);
+  if(user?.userName.toString() === req.body.username && user?.email.toString() === req.body.email)
+  {
+    // res.status(401).json({message:"username and email is already exist"})
+    console.log(req.body);
+    if(req.body)
+    {
+      user.address.pinCode = req.body.pinCode;
+      user.address.city = req.body.city;
+      user.address.street = req.body.street;
+      user.address.state = req.body.state;
+      user.address.country = req.body.country;
+      user.address.contact = req.body.contact;
+      await user.save();
+      console.log(user);
+      console.log("HI");
+      return res.status(201).json({message:"address and contact is updated successfully",username:user.userName,email:user.email,avtar:user.avtar,userId:user._id,data:user?.address});
+    }
+  }
+  
+  else
+  {
+    user.userName = req.body.username || "";
+    user.email = req.body.email || "";
+    user.address.pinCode = req.body.pinCode || "";
+    user.address.city = req.body.city || "";
+    user.address.street = req.body.street || "";
+    user.address.state = req.body.state || "";
+    user.address.country = req.body.country || "";
+    user.address.contact = req.body.contact || "";
+    await user.save();
+    const userOne  = await User.findById(req.params.userId);
+    return res.status(201).json({message:"address and contact is updated successfully",username:user.userName,email:user.email,data:userOne.address});
+    }
+    
+  
+
+}
+
 
 //Login section
 const lgoinUser = async (req, res) => {
@@ -44,41 +95,43 @@ const lgoinUser = async (req, res) => {
           email: user.email,
           password: user.password,
           avtar: user.avtar,
+          address:user.address  
         },
       },
       process.env.JSON_WEB_TOKEN_SECRETE
     );
 
-    const cart = await Cart.aggregate([
-      {
-        $match: { user_id: user._id}
-      },
-      {
-        $unwind: "$items"
-      },
-      {
-        $lookup: {
-          from: "products",
-          localField: "items.product_id",
-          foreignField: "_id",
-          as: "items.product"
-        }
-      },
-      {
-        $unwind: "$items.product"
-      },
-      {
-        $project: {
-          "user_id": 1,
-          "product_id": "$items.product._id",
-          "product_name": "$items.product.title",
-          "product_image": "$items.product.image",
-          "product_price": "$items.product.price",
-          "quantity": "$items.quantity"
-          // Add more fields as needed
-        }
-      }
-    ]).exec();
+    // const cart = await Cart.aggregate([
+    //   {
+    //     $match: { user_id: user._id}
+    //   },
+    //   {
+    //     $unwind: "$items"
+    //   },
+    //   {
+    //     $lookup: {
+    //       from: "products",
+    //       localField: "items.product_id",
+    //       foreignField: "_id",
+    //       as: "items.product"
+    //     }
+    //   },
+    //   {
+    //     $unwind: "$items.product"
+    //   },
+    //   {
+    //     $project: {
+    //       "user_id": 1,
+    //       "product_id": "$items.product._id",
+    //       "product_name": "$items.product.title",
+    //       "product_image": "$items.product.image",
+    //       "product_price": "$items.product.price",
+    //       "quantity": "$items.quantity"
+    //       // Add more fields as needed
+    //     }
+    //   }
+    // ]).exec();
+    const cart = await Cart.findOne({user_id:user._id});
     console.log(cart);
     if(!cart)
     {
@@ -101,4 +154,4 @@ const lgoinUser = async (req, res) => {
 };
 
 
-export { registerUser, lgoinUser };
+export { registerUser, lgoinUser,upDateProfileData };

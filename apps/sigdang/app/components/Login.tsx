@@ -3,11 +3,21 @@ import React, {  useState } from 'react';
 import ErrorPupup from './ErrorPupup';
 import jwt from 'jsonwebtoken';
 import { useAuth } from '../utils/User';
+import { setCart } from 'apps/sigdang/redux/cartSlice';
+import { useDispatch } from 'react-redux';
 
 // import { useNavigate } from 'react-router';
-
+interface Address {
+  pinCode: string;
+  street: string;
+  country: string;
+  city: string;
+  state: string;
+  contact: string;
+}
 const Login = () => {
   const { login , addToCart} = useAuth();
+  const dispatch = useDispatch();
   const [user, setUser] = useState({
     username: '',
     password: '',
@@ -23,8 +33,8 @@ const Login = () => {
     setUser({ ...user, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = (username:string,email:string,avtar:string,userId:string) => {
-    login(username,email,avtar,userId);
+  const handleLogin = (username:string,email:string,avtar:string,userId:string,address:Address) => {
+    login(username,email,avtar,userId,address);
   };
   
 
@@ -65,15 +75,16 @@ const Login = () => {
       })
       .then((data) => {
         const currentUser = jwt.decode(data.userToken).data;
-        console.log(currentUser);
-        handleLogin(currentUser.username,currentUser.email,currentUser.avtar,currentUser.userId);
+        console.log(currentUser.address);
+        handleLogin(currentUser.username,currentUser.email,currentUser.avtar,currentUser.userId,currentUser.address);
         const cartItems = data.cart;
         
         // Update the local cart state or use addToCart for each item
+        console.log(cartItems);
        if(cartItems )
        {
        
-        addToCart(cartItems);
+        dispatch(setCart(cartItems));
        }
         
         // localStorage.setItem("user",JSON.stringify(jwt.decode(data.userToken).data))

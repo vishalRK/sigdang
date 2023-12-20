@@ -42,7 +42,7 @@ const setCart = async (req, res) => {
   // return res.status(201).json(user);
 };
 const getCart = async (req, res) => {
-  const user = await User.findById(req.params.userId);
+const user = await User.findById(req.params.userId);
 
   if (!user) {
     return res.status(500).json({ message: 'user not found' });
