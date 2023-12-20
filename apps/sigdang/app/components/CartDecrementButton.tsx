@@ -21,8 +21,8 @@ type Incremnt  ={
     classname:string,
     productId:string,
     text:string,
-    products:Products[],
-    setProduct: React.Dispatch<React.SetStateAction<Products[]>>;
+    products?:Products[],
+    setProduct?: React.Dispatch<React.SetStateAction<Products[]>>;
 }
 const CartDecrementButton = ({classname,productId,text,setProduct,products}:Incremnt) => {
     
@@ -46,7 +46,7 @@ const CartDecrementButton = ({classname,productId,text,setProduct,products}:Incr
             }
             return response.json();
         }).then(data => {
-            const updatedProducts = products.map((product: Products) => {
+            const updatedProducts = products?.map((product: Products) => {
                 if(data.cart)
                 {
         
@@ -64,7 +64,11 @@ const CartDecrementButton = ({classname,productId,text,setProduct,products}:Incr
                     }
                     return product;
                   });
-            setProduct(updatedProducts);
+                  if(setProduct && updatedProducts)
+                  {
+                      setProduct(updatedProducts);
+                  }
+  
             dispatch(setCart(data?.updatedCart));
         }).catch(error => {console.log(error)})
     }
