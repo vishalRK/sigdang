@@ -3,9 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { useAuth } from '../../utils/User';
 import { useSelector } from 'react-redux';
 import { RootState } from 'apps/sigdang/redux/store';
+import { loadStripe } from "@stripe/stripe-js";
+import { Elements } from "@stripe/react-stripe-js";
+
+
 import Link from 'next/link';
 import CartIncrementButton from '../../components/CartIncrementButton';
 import CartDecrementButton from '../../components/CartDecrementButton';
+import { Session } from 'inspector';
 
 interface Tag {
   country: string;
@@ -45,7 +50,7 @@ interface Address {
 const Cart = () => {
   const {users} = useAuth();
   const [carts,setCart] = useState<CartItem>() 
-  const [address,setAddress] = useState<Address>() 
+  const [address,setAddress] = useState<Address>()
   const cart = useSelector((state: RootState) => state.cart);
   useEffect(() => {
     fetch(`http://localhost:3000/api/v1/cart/getCart/${users.userId}`).then(response => {
@@ -72,6 +77,24 @@ const Cart = () => {
     return total + item.product_id.price * item.quantity;
   }, 0) || 0;
   
+
+  const handlePayment = () => {
+    const stripePromise = loadStripe("pk_test_51NGgJySE2X0xZxAiZnPhtKgnJzVs4SfT8evGsQSKymhEEF2Wmj9araDFIuiYr9JIrMrkZ991acsUq4kKjOZMH7G900O6bIG7qD");
+    fetch(`http://localhost:3000/api/v1/payment/create-checkout-session/${users.userId}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items:carts, totalPrice: totalPrice }),
+    })
+      .then((res) => res.json())
+      .then((data) => {
+        console.log(data);
+        stripePromise.then(s => s?.redirectToCheckout({sessionId:data.id}))
+       
+      });
+  }
+ 
+ 
+
   return (<div className="flex justify-center mt-10">
       {carts?.items.length != 0?
       (<div className="w-[90vw] small:w-[100vw]  shadow-2xl grid large:grid-cols-2 small:grid-rows-1 p-4">
@@ -146,7 +169,9 @@ const Cart = () => {
             </div>
 
             <div className='row-span-1 '>
-              <button className='w-[100%] bg-green-300 h-[100%] rounded-xl'>Proceed To CheckOut</button>
+          
+              <button className='w-[100%] bg-green-300 h-[100%] rounded-xl' onClick={() => handlePayment()}>Proceed To CheckOut</button>
+       
               <div className='w-[100%] mt-5 bg-red-300 break-words p-2 rounded-xl'>
                 <p className='text-[2vw] small:text-[4vw] '>
                   {`${address?.street},${address?.city},${address?.state},${address?.country},${address?.pinCode}`}

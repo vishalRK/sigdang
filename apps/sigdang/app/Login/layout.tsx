@@ -13,13 +13,13 @@ export default function Layout({
   children: React.ReactNode;
 }) {
   const {users} = useAuth();
-  const router = useRouter();
-  useEffect(() => {
-    if (!users.username) {
-      // Redirect to the login page if the user is not authenticated
-      router.push('/Login');
-    }
-  }, [users.username, router]);
+  // const router = useRouter();
+  // useEffect(() => {
+  //   if (!users.username) {
+  //     // Redirect to the login page if the user is not authenticated
+  //     router.push('/Login');
+  //   }
+  // }, [users.username, router]);
  
   
   return (

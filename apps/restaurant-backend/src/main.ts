@@ -5,6 +5,7 @@ import userRouter from './routes/auth/user.route';
 import contactRouter from './routes/contact/contact.route';
 import cartRouter from './routes/cart/cart.route';
 import productRouter from './routes/product/product.route';
+import paymentRouter from './routes/payment/payment.route';
 const app = express();
 app.use(
   cors({
@@ -19,6 +20,7 @@ app.use('/api/v1/user', userRouter);
 app.use('/api/v1/contact', contactRouter);
 app.use('/api/v1/cart', cartRouter);
 app.use('/api/v1/product', productRouter);
+app.use('/api/v1/payment', paymentRouter);
 
 mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASS}@cluster0.y1iwedf.mongodb.net/?retryWrites=true&w=majority`,{
 // mongoose.connect(`mongodb+srv://${process.env.MONGO_DB_USER}:${process.env.MONGO_DB_PASS}@cluster0.nl1tgvo.mongodb.net/?retryWrites=true&w=majority`,{
