@@ -1,7 +1,25 @@
+"use client";
+import { loadStripe } from '@stripe/stripe-js';
 import Link from 'next/link';
-import React from 'react';
+import { useSearchParams } from 'next/navigation';
+import React, { useEffect } from 'react'
+import Stripe from 'stripe';
 
-const page = () => {
+const PaymentSuccess = () => {
+  const searchParams = useSearchParams();
+  const search = searchParams.get('session_id')
+  console.log(search);
+
+  useEffect(() => {
+    const newStripe = new Stripe(
+      'sk_test_51NGgJySE2X0xZxAimZGwVKqBpDXBfMTbZOC9pQbU1QENdV09zKJoCAdqapvj8DEhmCHnJxz7Mo48TzIWc1AwTtUy00ITMC6nK3'
+    );
+      if(search)
+      {
+        const session =  newStripe.checkout.sessions.retrieve(search).then(data => console.log(data));
+      }
+
+  },[])
   return (
     <div className="bg-gray-100 h-screen">
       <div className="bg-white p-6  md:mx-auto">
@@ -24,7 +42,7 @@ const page = () => {
           <p> Have a great day! </p>
           <div className="py-10 text-center">
             <Link href={"/Login/Order"} className="px-12 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold py-3">
-                GO BACK
+                GO To Orders
             </Link>
           </div>
         </div>
@@ -33,4 +51,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default PaymentSuccess;
