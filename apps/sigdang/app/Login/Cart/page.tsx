@@ -10,7 +10,6 @@ import { Elements } from "@stripe/react-stripe-js";
 import Link from 'next/link';
 import CartIncrementButton from '../../components/CartIncrementButton';
 import CartDecrementButton from '../../components/CartDecrementButton';
-import { Session } from 'inspector';
 
 interface Tag {
   country: string;
@@ -70,6 +69,10 @@ const Cart = () => {
       }
     })
     
+    const data = localStorage.getItem('data');
+
+    console.log(data);
+    
   },[cart])
 
   const totalPrice = carts?.items.reduce((total, item) => {
@@ -88,7 +91,11 @@ const Cart = () => {
       .then((res) => res.json())
       .then((data) => {
         console.log(data);
-        stripePromise.then(s => s?.redirectToCheckout({sessionId:data.id}))
+        localStorage.setItem('data',data.id);
+        stripePromise.then(s => {
+          s?.redirectToCheckout({sessionId:data.id})
+          return s;
+        })
        
       });
   }
